@@ -27,6 +27,8 @@ import pacman.game.GameView;
 
 import static pacman.game.Constants.*;
 
+import pacman.entries.ghosts.MyGhosts;
+
 /**
  * This class may be used to execute the game in timed or un-timed modes, with or without
  * visuals. Competitors should implement their controllers in game.entries.ghosts and 
@@ -62,7 +64,8 @@ public class Executor
 		//run the game in asynchronous mode.
 		boolean visual=true;
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
-		exec.runGameTimed(new StarterPacMan(),new StarterGhosts(),visual);
+		//StarterPacMan()
+		exec.runGameTimed(new HumanController(new KeyBoardInput()),new MyGhosts(),visual);
 //		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);	
 		//*/
 		
