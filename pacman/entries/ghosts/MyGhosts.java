@@ -33,21 +33,11 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		*/
 		//PINKY Code here:
 		int newNodeIndex;
-		switch(game.getPacmanLastMoveMade()){
-			case UP: newNodeIndex = getNodeIndexByCood(game, game.getNodeXCood(game.getPacmanCurrentNodeIndex()), game.getNodeYCood(game.getPacmanCurrentNodeIndex())-4);
-						break;
-			case RIGHT: newNodeIndex = getNodeIndexByCood(game, game.getNodeXCood(game.getPacmanCurrentNodeIndex())+4, game.getNodeYCood(game.getPacmanCurrentNodeIndex()));
-						break;
-			case DOWN: newNodeIndex = getNodeIndexByCood(game, game.getNodeXCood(game.getPacmanCurrentNodeIndex()), game.getNodeYCood(game.getPacmanCurrentNodeIndex())+4);
-						break;
-			case LEFT: newNodeIndex = getNodeIndexByCood(game, game.getNodeXCood(game.getPacmanCurrentNodeIndex())-4, game.getNodeYCood(game.getPacmanCurrentNodeIndex()));
-						break;
-			case NEUTRAL: newNodeIndex = getNodeIndexByCood(game, game.getNodeXCood(game.getPacmanCurrentNodeIndex()), game.getNodeYCood(game.getPacmanCurrentNodeIndex()));	
-						break;
-			default: newNodeIndex = -1;
-						break;
-		}
-		System.out.println(newNodeIndex);
+		
+		System.out.println(game.getNodeXCood(game.getPacmanCurrentNodeIndex()));
+		System.out.println(game.getNodeYCood(game.getPacmanCurrentNodeIndex()));
+		System.out.println("------------------");
+//		System.out.println(newNodeIndex);
 		
 		myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
 				newNodeIndex, game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
@@ -64,7 +54,7 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		else
 		{
 			myMoves.put(GHOST.SUE, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.SUE),
-					getNodeIndexByCood(game, 0, 0), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
+					getNodeIndexByCood(game, 4, 116), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
 		}
 				
 		/*
@@ -82,11 +72,11 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 	
 	public int getNodeIndexByCood(Game game, int x, int y)
 	{
-		/*
-		System.out.println(x);
-		System.out.println(y);
-		System.out.println(" -- ");
-		*/
+		
+//		System.out.println(x);
+//		System.out.println(y);
+//		System.out.println(" -- ");
+		//TODO do a modulo on the coordinate so it doesn't become illegal
 		for(Node n : game.getCurrentMaze().graph)
 		{
 			if(n.x == x && n.y == y)
@@ -96,6 +86,45 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		
 		}
 		System.out.println("Node not found with "+x+" and " +y);
+		return -1;
+	}
+
+	
+	public int getZNodesInFrontOfPacman(Game game, int z)
+	{
+		int newX, newY;
+		switch(game.getPacmanLastMoveMade()){
+		case UP: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())-z;
+		break;
+		case RIGHT:
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())+z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		case DOWN: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())+z;
+		break;
+		case LEFT: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())-z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		case NEUTRAL: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		default: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		}
+		
+		if (newX < 0)
+		{
+			newX=0;
+		}
+		else if (newX > )
 		return -1;
 	}
 	
