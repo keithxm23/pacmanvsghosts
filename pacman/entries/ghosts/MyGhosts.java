@@ -20,7 +20,10 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 	private EnumMap<GHOST, MOVE> myMoves=new EnumMap<GHOST, MOVE>(GHOST.class);
 	private MOVE[] allMoves=MOVE.values();
 	private Random rnd=new Random();
-	
+	public int minX = 4;
+	public int minY = 4;
+	public int maxX = 104;
+	public int maxY = 116;
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue)
 	{
 		myMoves.clear();
@@ -31,16 +34,10 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		/*myMoves.put(GHOST.BLINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.BLINKY),
 				game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(GHOST.BLINKY),DM.PATH));
 		*/
+		
 		//PINKY Code here:
-		int newNodeIndex;
-		
-		System.out.println(game.getNodeXCood(game.getPacmanCurrentNodeIndex()));
-		System.out.println(game.getNodeYCood(game.getPacmanCurrentNodeIndex()));
-		System.out.println("------------------");
-//		System.out.println(newNodeIndex);
-		
 		myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
-				newNodeIndex, game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
+				getZNodesInFrontOfPacman(game, 4), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
 				
 		//INKY Code here: TODO
 		myMoves.put(GHOST.INKY, MOVE.LEFT);
@@ -120,12 +117,25 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		break;
 		}
 		
-		if (newX < 0)
+		if (newX < minX)
 		{
-			newX=0;
+			newX=minX;
 		}
-		else if (newX > )
-		return -1;
+		else if (newX > maxX)
+		{
+			newX = maxX;
+		}
+		
+		if (newY < minY)
+		{
+			newY=minY;
+		}
+		else if (newY > maxY)
+		{
+			newY = maxY;
+		}
+		
+		return getNodeIndexByCood(game, newX, newY);
 	}
 	
 	
