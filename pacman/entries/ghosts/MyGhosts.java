@@ -36,12 +36,43 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		*/
 		
 		//PINKY Code here:
-		myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
+		if(getZNodesInFrontOfPacman(game, 4) == -1)//If the target node is a wall, repeat the last move
+		{
+			myMoves.put(GHOST.PINKY, game.getGhostLastMoveMade(GHOST.PINKY)); //Repeat last move
+		}
+		else
+		{
+			myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
 				getZNodesInFrontOfPacman(game, 4), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
-				
-		//INKY Code here: TODO
-		myMoves.put(GHOST.INKY, MOVE.LEFT);
-						
+		}		
+		
+		
+		
+		//INKY Code here:
+		if(getZNodesInFrontOfPacman(game, 2) == -1)//If the target node is a wall, repeat the last move
+		{
+			myMoves.put(GHOST.INKY, game.getGhostLastMoveMade(GHOST.INKY)); //Repeat last move
+		}
+		else
+		{
+			int tmpX = game.getNodeXCood(getZNodesInFrontOfPacman(game, 2)) - game.getNodeXCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			int tmpY = game.getNodeYCood(getZNodesInFrontOfPacman(game, 2)) - game.getNodeYCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			
+			int inkyX, inkyY;
+			
+			inkyX = boundX(game.getNodeXCood(getZNodesInFrontOfPacman(game, 2)) + tmpX);
+			inkyY = boundY(game.getNodeYCood(getZNodesInFrontOfPacman(game, 2)) + tmpY);
+			
+			if (getNodeIndexByCood(game, inkyX, inkyY) != -1) //if targeted node does not exist, repeat last move
+			{
+				myMoves.put(GHOST.INKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
+					getNodeIndexByCood(game, inkyX, inkyY), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
+			}
+			else
+			{
+				myMoves.put(GHOST.INKY, game.getGhostLastMoveMade(GHOST.INKY)); //Repeat last move
+			}
+		}
 		//SUE Code here:
 		if (game.getEuclideanDistance(game.getGhostCurrentNodeIndex(GHOST.SUE), game.getPacmanCurrentNodeIndex()) > 8)
 		{
@@ -54,15 +85,7 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 					getNodeIndexByCood(game, 4, 116), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
 		}
 				
-		/*
-		for(GHOST ghost : GHOST.values())	//for each ghost
-		{			
-			if(game.doesGhostRequireAction(ghost))		//if ghost requires an action
-			{
-				myMoves.put(ghost,allMoves[rnd.nextInt(allMoves.length)]);
-			}
-		}
-		*/
+
 		
 		return myMoves;
 	}
@@ -70,10 +93,6 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 	public int getNodeIndexByCood(Game game, int x, int y)
 	{
 		
-//		System.out.println(x);
-//		System.out.println(y);
-//		System.out.println(" -- ");
-		//TODO do a modulo on the coordinate so it doesn't become illegal
 		for(Node n : game.getCurrentMaze().graph)
 		{
 			if(n.x == x && n.y == y)
@@ -117,27 +136,42 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		break;
 		}
 		
-		if (newX < minX)
-		{
-			newX=minX;
-		}
-		else if (newX > maxX)
-		{
-			newX = maxX;
-		}
-		
-		if (newY < minY)
-		{
-			newY=minY;
-		}
-		else if (newY > maxY)
-		{
-			newY = maxY;
-		}
+		newX = boundX(newX);
+		newY = boundY(newY);
 		
 		return getNodeIndexByCood(game, newX, newY);
 	}
 	
 	
+	public int boundX(int x)
+	{
+		if (x < minX)
+		{
+			return minX;
+		}
+		else if (x > maxX)
+		{
+			return maxX;
+		}
+		else
+		{
+			return x;
+		}
+	}
 	
+	public int boundY(int y)
+	{
+		if (y < minY)
+		{
+			return minY;
+		}
+		else if (y > maxY)
+		{
+			return maxY;
+		}
+		else
+		{
+			return y;
+		}
+	}
 }
