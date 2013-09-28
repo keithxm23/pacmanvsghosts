@@ -29,39 +29,42 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		myMoves.clear();
 		
 		//Placing game logic here to play the game as the ghosts
+		System.out.println(game.getMazeIndex());
+		
+		
 		//BLINKY Code here:
-		myMoves.put(GHOST.BLINKY, MOVE.LEFT);
-		/*myMoves.put(GHOST.BLINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.BLINKY),
+//		myMoves.put(GHOST.BLINKY, MOVE.LEFT);
+		myMoves.put(GHOST.BLINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.BLINKY),
 				game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(GHOST.BLINKY),DM.PATH));
-		*/
+		
 		
 		//PINKY Code here:
-		if(getZNodesInFrontOfPacman(game, 4) == -1)//If the target node is a wall, repeat the last move
+		if(getZNodesInFrontOfPacman(game, 4*2) == -1)//If the target node is a wall, repeat the last move
 		{
 			myMoves.put(GHOST.PINKY, game.getGhostLastMoveMade(GHOST.PINKY)); //Repeat last move
 		}
 		else
 		{
 			myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
-				getZNodesInFrontOfPacman(game, 4), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
+				getZNodesInFrontOfPacman(game, 4*2), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
 		}		
 		
 		
 		
 		//INKY Code here:
-		if(getZNodesInFrontOfPacman(game, 2) == -1)//If the target node is a wall, repeat the last move
+		if(getZNodesInFrontOfPacman(game, 2*2) == -1)//If the target node is a wall, repeat the last move
 		{
 			myMoves.put(GHOST.INKY, game.getGhostLastMoveMade(GHOST.INKY)); //Repeat last move
 		}
 		else
 		{
-			int tmpX = game.getNodeXCood(getZNodesInFrontOfPacman(game, 2)) - game.getNodeXCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
-			int tmpY = game.getNodeYCood(getZNodesInFrontOfPacman(game, 2)) - game.getNodeYCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			int tmpX = game.getNodeXCood(getZNodesInFrontOfPacman(game, 2*2)) - game.getNodeXCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+			int tmpY = game.getNodeYCood(getZNodesInFrontOfPacman(game, 2*2)) - game.getNodeYCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
 			
 			int inkyX, inkyY;
 			
-			inkyX = boundX(game.getNodeXCood(getZNodesInFrontOfPacman(game, 2)) + tmpX);
-			inkyY = boundY(game.getNodeYCood(getZNodesInFrontOfPacman(game, 2)) + tmpY);
+			inkyX = boundX(game.getNodeXCood(getZNodesInFrontOfPacman(game, 2*2)) + tmpX);
+			inkyY = boundY(game.getNodeYCood(getZNodesInFrontOfPacman(game, 2*2)) + tmpY);
 			
 			if (getNodeIndexByCood(game, inkyX, inkyY) != -1) //if targeted node does not exist, repeat last move
 			{
@@ -74,7 +77,7 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 			}
 		}
 		//SUE Code here:
-		if (game.getEuclideanDistance(game.getGhostCurrentNodeIndex(GHOST.SUE), game.getPacmanCurrentNodeIndex()) > 8)
+		if (game.getEuclideanDistance(game.getGhostCurrentNodeIndex(GHOST.SUE), game.getPacmanCurrentNodeIndex()) > 8*2)
 		{
 			myMoves.put(GHOST.SUE, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.SUE),
 					game.getPacmanCurrentNodeIndex(), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
