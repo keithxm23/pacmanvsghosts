@@ -2,6 +2,7 @@ package pacman.entries.ghosts;
 
 import java.util.EnumMap;
 import java.util.Random;
+import java.util.Map.Entry;
 
 import pacman.controllers.Controller;
 import pacman.game.Constants.DM;
@@ -39,6 +40,34 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		
 		
 		//PINKY Code here:
+		int z = 4*2;
+		int newX, newY;
+		switch(game.getPacmanLastMoveMade()){
+		case UP: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())-z;
+		break;
+		case RIGHT:
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())+z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		case DOWN: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())+z;
+		break;
+		case LEFT: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())-z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		default: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		}
+		myMoves.put(GHOST.PINKY, getCustomNextMoveTowardsTarget(game, game.getGhostCurrentNodeIndex(GHOST.PINKY),
+				newX, newY, game.getGhostLastMoveMade(GHOST.PINKY)));
+		
+		/*
 		if(getZNodesInFrontOfPacman(game, 4*2) == -1)//If the target node is a wall, repeat the last move
 		{
 			myMoves.put(GHOST.PINKY, game.getGhostLastMoveMade(GHOST.PINKY)); //Repeat last move
@@ -48,34 +77,48 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 			myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
 				getZNodesInFrontOfPacman(game, 4*2), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
 		}		
-		
+		*/
 		
 		
 		//INKY Code here:
-		if(getZNodesInFrontOfPacman(game, 2*2) == -1)//If the target node is a wall, repeat the last move
-		{
-			myMoves.put(GHOST.INKY, game.getGhostLastMoveMade(GHOST.INKY)); //Repeat last move
+		z = 2*2;
+		switch(game.getPacmanLastMoveMade()){
+		case UP: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())-z;
+		break;
+		case RIGHT:
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())+z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		case DOWN: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex())+z;
+		break;
+		case LEFT: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex())-z;
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
+		default: 
+		newX = game.getNodeXCood(game.getPacmanCurrentNodeIndex());
+		newY =  game.getNodeYCood(game.getPacmanCurrentNodeIndex());
+		break;
 		}
-		else
-		{
-			int tmpX = game.getNodeXCood(getZNodesInFrontOfPacman(game, 2*2)) - game.getNodeXCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
-			int tmpY = game.getNodeYCood(getZNodesInFrontOfPacman(game, 2*2)) - game.getNodeYCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
-			
-			int inkyX, inkyY;
-			
-			inkyX = boundX(game.getNodeXCood(getZNodesInFrontOfPacman(game, 2*2)) + tmpX);
-			inkyY = boundY(game.getNodeYCood(getZNodesInFrontOfPacman(game, 2*2)) + tmpY);
-			
-			if (getNodeIndexByCood(game, inkyX, inkyY) != -1) //if targeted node does not exist, repeat last move
-			{
-				myMoves.put(GHOST.INKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
-					getNodeIndexByCood(game, inkyX, inkyY), game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
-			}
-			else
-			{
-				myMoves.put(GHOST.INKY, game.getGhostLastMoveMade(GHOST.INKY)); //Repeat last move
-			}
-		}
+		int tmpX = newX - game.getNodeXCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+		int tmpY = newY - game.getNodeYCood(game.getGhostCurrentNodeIndex(GHOST.BLINKY));
+		
+		int inkyX, inkyY;
+		
+		inkyX = newX + tmpX;
+		inkyY = newY + tmpY;
+		
+
+		myMoves.put(GHOST.INKY, getCustomNextMoveTowardsTarget(game, game.getGhostCurrentNodeIndex(GHOST.INKY),
+			inkyX, inkyY, game.getGhostLastMoveMade(GHOST.INKY)));
+
+		
+		
+		
 		//SUE Code here:
 		if (game.getEuclideanDistance(game.getGhostCurrentNodeIndex(GHOST.SUE), game.getPacmanCurrentNodeIndex()) > 8*2)
 		{
@@ -176,5 +219,49 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		{
 			return y;
 		}
+	}
+	
+	/**
+	 * Gets the next move towards target not considering directions opposing the last move made.
+	 *
+	 * @param Game object
+	 * @param fromNodeIndex The node index from which to move (i.e., current position)
+	 * @param x co-ordinate of the target
+	 * @param y co-ordinate of the target
+	 * @param lastMoveMade The last move made
+	 * @return The approximate next move towards target (chosen greedily)
+	 */
+	public MOVE getCustomNextMoveTowardsTarget(Game game, int fromNodeIndex, int x, int y, MOVE lastMoveMade)
+	{
+		MOVE move=null;
+
+		double minDistance=Integer.MAX_VALUE;
+
+		for(Entry<MOVE,Integer> entry : game.getCurrentMaze().graph[fromNodeIndex].allNeighbourhoods.get(lastMoveMade).entrySet())
+		{
+			double distance=getCustomEuclideanDistance(game, entry.getValue(), x, y);
+								
+			if(distance<minDistance)
+			{
+				minDistance=distance;
+				move=entry.getKey();	
+			}
+		}
+		return move;
+	}
+	
+	/**
+	 * Returns the EUCLEDIAN distance between two nodes in the current mazes[gs.curMaze].
+	 *
+	 * @param Game object
+	 * @param fromNodeIndex the from node index
+	 * @param x co-ordinate of target
+	 * @param y co-ordinate of target
+	 * @return the euclidean distance
+	 */
+	public double getCustomEuclideanDistance(Game game, int fromNodeIndex, int x, int y)
+	{
+		return Math.sqrt(Math.pow(game.getCurrentMaze().graph[fromNodeIndex].x - x,2) 
+							+ Math.pow(game.getCurrentMaze().graph[fromNodeIndex].y - y,2));
 	}
 }
