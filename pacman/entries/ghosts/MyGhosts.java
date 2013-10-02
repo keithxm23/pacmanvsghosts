@@ -26,35 +26,38 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 	public int maxX = 104;
 	public int maxY = 116;
 	public int timer = 0;
-	public int lastScatterAt = 0;
-	public int ticksPerSec = 30;
+	public int lastScatterAt = -1;
+	public int ticksPerSec = 30; //since 30ticks seemed to equal 1 second
 	public EnumMap<GHOST, MOVE> getMove(Game game, long timeDue)
 	{
 		myMoves.clear();
+		
+		//Check if GlobalReversal occurred so as to trigger scatter mode
 		if (game.getTimeOfLastGlobalReversal() != lastScatterAt)
 		{
 			lastScatterAt = game.getTimeOfLastGlobalReversal();
 			timer = 7 * ticksPerSec;
 		}
-		//looks like 30ticks is one second
+		
 		if (timer > 0)
 			{
 			//Enter Scatter Mode
 			timer--;
 			System.out.println("In scatter Mode " + game.getTimeOfLastGlobalReversal()+ "  " + game.getTotalTime());
 			myMoves.put(GHOST.BLINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.BLINKY),
-					getNodeIndexByCood(game, 104, 4),game.getGhostLastMoveMade(GHOST.BLINKY),DM.PATH));
+					getNodeIndexByCood(game, maxX, minX),game.getGhostLastMoveMade(GHOST.BLINKY),DM.PATH));
 			myMoves.put(GHOST.PINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.PINKY),
-					getNodeIndexByCood(game, 4, 4),game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
+					getNodeIndexByCood(game, minX, minX),game.getGhostLastMoveMade(GHOST.PINKY),DM.PATH));
 			myMoves.put(GHOST.INKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.INKY),
-					getNodeIndexByCood(game, 104, 116),game.getGhostLastMoveMade(GHOST.INKY),DM.PATH));
+					getNodeIndexByCood(game, maxX, maxY),game.getGhostLastMoveMade(GHOST.INKY),DM.PATH));
 			myMoves.put(GHOST.SUE, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.SUE),
-					getNodeIndexByCood(game, 4, 116),game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
+					getNodeIndexByCood(game, minX, maxY),game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
 			
 		}
 		else
 		{
 			//Enter chase mode
+			
 			//BLINKY Code here:
 			myMoves.put(GHOST.BLINKY, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.BLINKY),
 					game.getPacmanCurrentNodeIndex(),game.getGhostLastMoveMade(GHOST.BLINKY),DM.PATH));
@@ -96,10 +99,10 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 			else
 			{
 				myMoves.put(GHOST.SUE, game.getApproximateNextMoveTowardsTarget(game.getGhostCurrentNodeIndex(GHOST.SUE),
-						getNodeIndexByCood(game, 4, 116), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
+						getNodeIndexByCood(game, minX, maxY), game.getGhostLastMoveMade(GHOST.SUE),DM.PATH));
 			}
 					
-	
+			//if a ghost is frightened, perform pseudorandom moves
 			for(GHOST ghost : GHOST.values())	//for each ghost
 			{			
 				if(game.isGhostEdible(ghost))		//if ghost is frightened
