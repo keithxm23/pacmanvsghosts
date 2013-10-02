@@ -28,6 +28,7 @@ import pacman.game.GameView;
 import static pacman.game.Constants.*;
 
 import pacman.entries.ghosts.MyGhosts;
+import pacman.entries.ghosts.GhostGuards;
 
 /**
  * This class may be used to execute the game in timed or un-timed modes, with or without
@@ -65,7 +66,7 @@ public class Executor
 		boolean visual=true;
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
 		//StarterPacMan()
-		exec.runGameTimed(new HumanController(new KeyBoardInput()),new MyGhosts(),visual);
+		exec.runGameTimed(new HumanController(new KeyBoardInput()),new GhostGuards(),visual);
 //		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);	
 		//*/
 		
