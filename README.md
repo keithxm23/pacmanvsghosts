@@ -2,7 +2,7 @@
 ### Author: Keith Mascarenhas
 
 ## Custom AI Premise:
-“Pacman is being hounded by the ghosts of Goldfish security Guards with walkie-talkies. As a result, they each have their own region of surveillance which they constantly patrol. However as soon as one of them gets sight of Pacman, they notify all the others of Pacman's last seen whereabouts and they all head towards the target. However, being the ghosts of goldfishes, they have memories of only a few (2-3 seconds) and once they’ve lost sight of Pacman for more than 3 seconds they forget all about him and get back to guarding their precious power-pills.”
+“Pacman is being hounded by the ghosts of Goldfish security Guards with walkie-talkies. As a result, they each have their own region of surveillance which they constantly patrol. However as soon as one of them gets sight of Pacman, they notify all the others of Pacman's last seen whereabouts and they all head towards the target. However, being the ghosts of goldfishes, they have very short memories (2-3 seconds) and once they’ve lost sight of Pacman for more than 3 seconds they forget all about him and get back to guarding their precious power-pills.”
 
 ### View the attached pdf for more details about the Traditional AI implementation and Custom AI implementation.
 
