@@ -66,9 +66,8 @@ public class Executor
 		boolean visual=true;
 //		exec.runGameTimed(new NearestPillPacMan(),new AggressiveGhosts(),visual);
 		//StarterPacMan()
-		exec.runGameTimed(new HumanController(new KeyBoardInput()),new GhostGuards(),visual);
-//		exec.runGameTimed(new HumanController(new KeyBoardInput()),new MyGhosts(),visual);
-//		exec.runGameTimed(new HumanController(new KeyBoardInput()),new StarterGhosts(),visual);	
+//		exec.runGameTimed(new HumanController(new KeyBoardInput()),new GhostGuards(),visual); //My Custom AI
+		exec.runGameTimed(new HumanController(new KeyBoardInput()),new MyGhosts(),visual); //My Traditional AI Mimick
 		//*/
 		
 		/*

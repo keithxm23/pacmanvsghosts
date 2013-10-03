@@ -11,11 +11,7 @@ import pacman.game.Constants.MOVE;
 import pacman.game.Game;
 import pacman.game.internal.Node;
 
-/*
- * This is the class you need to modify for your entry. In particular, you need to
- * fill in the getActions() method. Any additional classes you write should either
- * be placed in this package or sub-packages (e.g., game.entries.ghosts.mypackage).
- */
+
 public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 {
 	private EnumMap<GHOST, MOVE> myMoves=new EnumMap<GHOST, MOVE>(GHOST.class);
@@ -114,6 +110,16 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		return myMoves;
 	}
 	
+	// ---------------------- Helper Functions -----------------------
+	
+	/**
+	 * Returns NodeIndex if it exists, given x y coordinates
+	 *
+	 * @param Game object
+	 * @param x the x coordinate
+	 * @param y the y coordinate
+	 * @return int the nodeIndex of the corresponding coordiantes
+	 */
 	public int getNodeIndexByCood(Game game, int x, int y)
 	{
 		for(Node n : game.getCurrentMaze().graph)
@@ -127,7 +133,13 @@ public class MyGhosts extends Controller<EnumMap<GHOST,MOVE>>
 		return -1;
 	}
 
-	
+	/**
+	 * Returns the x and y coordinates of the location z units ahead of Pacman
+	 *
+	 * @param Game object
+	 * @param z the number of units in front of Pacman
+	 * @return int [] the x and y coordinates of the location z units ahead of Pacman
+	 */
 	public int [] getZCoodsInFrontOfPacman(Game game, int z)
 	{
 		int newX, newY;
