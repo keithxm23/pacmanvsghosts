@@ -22,6 +22,7 @@ public class GhostState {
 	private state current;
 	public static int lastSeenPacmanAt;
 	public static int pacmanSeenBy = 0;
+	public static int chaseCoolDown = 0;
 	
 	public GhostState(GHOST ghost) {
 		this.ghost = ghost;
@@ -48,13 +49,14 @@ public class GhostState {
 			
 			System.out.println("Ghost xy: " +ghostX+","+ghostY+" Pac xy: "+pacmanX+","+pacmanY+ ". manh, euc"+game.getDistance(ghostNode, pacmanNode, game.getGhostLastMoveMade(ghost), DM.MANHATTAN)+","+game.getDistance(ghostNode, pacmanNode, DM.EUCLID));
 			lastSeenPacmanAt = pacmanNode;
-			pacmanSeenBy++;			
+			pacmanSeenBy++;
+			chaseCoolDown = 30*5; //approx 5 seconds
 		}		
 	}
 	
 	public void transitionState(Game game, EnumMap<GHOST, GhostState> ghosts)
 	{
-		if (pacmanSeenBy > 0)
+		if ((pacmanSeenBy > 0) || (chaseCoolDown > 0))
 		{
 			current = state.CHASE;
 			System.out.println(ghost + " is now CHASING!");
@@ -70,6 +72,7 @@ public class GhostState {
 	public int [] getTarget(Game game)
 	{
 		pacmanSeenBy = 0;
+		chaseCoolDown--;
 		switch(current)
 		{
 		case CHASE:
